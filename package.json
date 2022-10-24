@@ -4,7 +4,7 @@
   "description": "Discord bot for creating teams and moving them to the relevant channel",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
