@@ -19,20 +19,16 @@ module.exports = {
 			const voiceChannels = teamsCategory.children;
 
 			// Move users then delete old voice channels
-			await voiceChannels.cache.each(channel => {
+			voiceChannels.cache.each(async channel => {
 
 				console.debug(`Starting process to delete: ${channel.name} with ${channel.members.size} members`);
 
-				channel.members.each(user => {
-					console.debug(`Moving user: ${user.displayName}`);
-
-					user.voice.setChannel(returnChannel, `Moved to return channel ${returnChannel.name} to clean old teams channels`);
+				moveUsers(channel, returnChannel).then(() => {
+					channel.delete('Cleaning old teams channels')
+						.then(console.debug('Deleted channel: ' + channel.name));
 				});
-
-				channel.delete('Cleaning old teams channels');
-
-				console.debug('Finished deleting: ' + channel.name);
 			});
+
 
 			console.debug('Deleting teams channel category');
 
@@ -49,3 +45,13 @@ module.exports = {
 
 	},
 };
+
+async function moveUsers(channel, returnChannel) {
+
+	return channel.members.each(async user => {
+		await user.voice.setChannel(returnChannel, `Moved to return channel ${returnChannel.name} to clean old teams channels`)
+			.then(() => {
+				console.debug(`Moved user: ${user.displayName}`);
+			});
+	});
+}
