@@ -19,16 +19,14 @@ module.exports = {
 			const voiceChannels = teamsCategory.children;
 
 			// Move users then delete old voice channels
-			await voiceChannels.cache.each(async channel => {
-
-				channel = await channel.fetch();
+			await voiceChannels.cache.each(channel => {
 
 				console.debug(`Starting process to delete: ${channel.name} with ${channel.members.size} members`);
 
-				channel.members.each(async user => {
+				channel.members.each(user => {
 					console.debug(`Moving user: ${user.displayName}`);
 
-					await user.voice.setChannel(returnChannel, `Moved to return channel ${returnChannel.name} to clean old teams channels`);
+					user.voice.setChannel(returnChannel, `Moved to return channel ${returnChannel.name} to clean old teams channels`);
 				});
 
 				channel.delete('Cleaning old teams channels');
