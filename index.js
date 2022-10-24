@@ -2,7 +2,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { BOT_TOKEN } = require('./config.json');
+require('dotenv').config();
+
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
